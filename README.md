@@ -19,7 +19,7 @@ That configuration information is currently supplied via a file in the working d
         host: 192.168.1.35
         port: 6379
 
-If this file is absent, Uphold will crash. `localhost` will be the default host and `6379` the default port if either or both or the `redis` block are missing.
+If this file is absent or unparseable, Uphold will inform you. `localhost` will be the default host and `6379` the default port if either or both or the `redis` block are missing.
 
 ### Recommended Setup
 
