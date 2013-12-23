@@ -54,5 +54,4 @@ def main():
         #get next task
         task_json = r.lpop("tasks:"+platform.node())
 
-if __name__ == "__main__":
-    main()
+
