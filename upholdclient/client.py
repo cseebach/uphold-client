@@ -57,11 +57,7 @@ def main():
         print "uphold.txt not valid YAML: exiting."
         return
 
-    redis_config = config.get("redis", {"host": "localhost", "port": 6379})
-
-    r = redis.StrictRedis(
-        host=redis_config.get("host", "localhost"),
-        port=redis_config.get("port", 6379))
+    r = redis.StrictRedis.from_url(config.get("redis", "redis://localhost:6379/"))
 
     log_run(r)
 
