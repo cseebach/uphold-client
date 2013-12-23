@@ -68,14 +68,16 @@ def main():
         task = json.loads(task_json)
 
         #execute task
+        started = datetime.datetime.utcnow().isoformat()
         for module in modules:
             if module.validate(task):
-                started = datetime.datetime.utcnow().isoformat()
                 if module.call(task):
                     log_success(r, task, started)
                 else:
                     log_failure(r, task, started)
                 break
+        else:
+            log_failure(r, task, started)
 
         #get next task
         task_json = r.lpop("tasks:" + platform.node())
