@@ -1,5 +1,8 @@
+__version__ = "1.0"
+
 import platform
 import json
+import argparse
 
 import redis
 import yaml
@@ -18,6 +21,10 @@ def log_failure(r, task):
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-v', action='version', version='uphold-client v'+__version__)
+    parser.parse_args()
+
     modules = [msi, putfile]
     
     try:
