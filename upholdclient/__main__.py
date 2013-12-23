@@ -17,11 +17,18 @@ def log_failure(r, task):
     r.rpush("tasklog", json.dumps(failure))
 
 
-if __name__ == "__main__":
+def main():
     modules = [msi, putfile]
     
-    with open("uphold.txt") as config_file:
-        config = yaml.load(config_file)
+    try:
+        with open("uphold.txt") as config_file:
+            config = yaml.load(config_file)
+    except IOError:
+        print "No uphold.txt file: exiting."
+        return
+    except yaml.YAMLError:
+        print "uphold.txt not valid YAML: exiting."
+        return
 
     redis_config = config.get("redis", {"host":"localhost", "port":6379})
     
@@ -46,3 +53,6 @@ if __name__ == "__main__":
 
         #get next task
         task_json = r.lpop("tasks:"+platform.node())
+
+if __name__ == "__main__":
+    main()
