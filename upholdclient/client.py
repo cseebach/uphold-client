@@ -11,6 +11,14 @@ import yaml
 from upholdclient import msi, putfile
 
 
+def log_run(r):
+    log = {
+        "computer": platform.node(),
+        "ran_at": datetime.datetime.utcnow().isoformat()
+    }
+    r.rpush("tasklog", json.dumps(log))
+
+
 def log_success(r, task, started):
     success = {
         "computer": platform.node(),
@@ -54,6 +62,8 @@ def main():
     r = redis.StrictRedis(
         host=redis_config.get("host", "localhost"),
         port=redis_config.get("port", 6379))
+
+    log_run(r)
 
     r.sadd("subscriptions", platform.node())
 
