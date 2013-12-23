@@ -34,11 +34,11 @@ def log_failure(r, task, started):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-v', action='version', version='uphold-client v'+__version__)
+    parser.add_argument('-v', action='version', version='uphold-client v' + __version__)
     parser.parse_args()
 
     modules = [msi, putfile]
-    
+
     try:
         with open("uphold.txt") as config_file:
             config = yaml.load(config_file)
@@ -49,18 +49,18 @@ def main():
         print "uphold.txt not valid YAML: exiting."
         return
 
-    redis_config = config.get("redis", {"host":"localhost", "port":6379})
-    
+    redis_config = config.get("redis", {"host": "localhost", "port": 6379})
+
     r = redis.StrictRedis(
         host=redis_config.get("host", "localhost"),
         port=redis_config.get("port", 6379))
 
     r.sadd("subscriptions", platform.node())
 
-    task_json = r.lpop("tasks:"+platform.node())
+    task_json = r.lpop("tasks:" + platform.node())
     while task_json:
         task = json.loads(task_json)
-        
+
         #execute task
         for module in modules:
             if module.validate(task):
@@ -72,6 +72,6 @@ def main():
                 break
 
         #get next task
-        task_json = r.lpop("tasks:"+platform.node())
+        task_json = r.lpop("tasks:" + platform.node())
 
 
